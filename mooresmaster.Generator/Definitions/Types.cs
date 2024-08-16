@@ -32,11 +32,7 @@ public record Type
             BooleanSchema => new BooleanType(),
             IntegerSchema => new IntType(),
             NumberSchema => new FloatType(),
-            StringSchema stringSchema => stringSchema.Format?.Literal switch
-            {
-                "uuid" => new UUIDType(),
-                _ => new StringType()
-            },
+            StringSchema stringSchema => GetStringSchemaType(stringSchema,semantics),
             ObjectSchema => new CustomType(nameTable.TypeNames[typeId]),
             OneOfSchema => new CustomType(nameTable.TypeNames[typeId]),
             RefSchema refSchema => new CustomType(nameTable.TypeNames[GetRefTypeId(refSchema, semantics)]),
@@ -49,6 +45,29 @@ public record Type
         var schemaClassId = semantics.RootSemanticsTable.First(root => root.Value.Root.SchemaId == schema.Ref).Value.ClassId;
 
         return schemaClassId;
+    }
+
+    private static Type GetStringSchemaType(StringSchema stringSchema, Semantics semantics)
+    {
+        if (stringSchema.UseCustomType?.Literal == true)
+        {
+            return new StringCustomType(stringSchema.PropertyName);
+        }
+        if (stringSchema.ForeignKey != null)
+        {
+            //外部キーのフォーマットは json名:data配下のプロパティ名:表示するプロパティ名 となっているので、:区切りの左2つが、ここで意味のあるものになる
+            //参考：https://discord.com/channels/888315641709330433/1255119998720933909/1264855303850164356
+            ClassId classId = new ClassId(); // TODO 何らかの方法で外部キーのターゲットとなるカスタムタイプを取得する 外部キーとセマンティクスを対応付けするテーブルを作ってもいいかも
+            
+            var foreignKeySchema = semantics.TypeSemanticsTable[classId].Schema as StringSchema;
+            return GetStringSchemaType(foreignKeySchema, semantics);
+        }
+        
+        return stringSchema.Format?.Literal switch
+        {
+            "uuid" => new UUIDType(),
+            _ => new StringType()
+        };
     }
 
     public string GetName()
@@ -99,6 +118,9 @@ public record Vector3IntType : BuiltinType;
 public record Vector4Type : BuiltinType;
 
 public record UUIDType : BuiltinType;
+
+// 下のCustomTypeとほぼ同じなので、統合してもいいと思います
+public record StringCustomType : BuiltinType;
 
 public record DictionaryType(Type KeyType, Type ValueType) : BuiltinType
 {

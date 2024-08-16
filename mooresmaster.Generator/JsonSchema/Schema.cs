@@ -64,11 +64,14 @@ public record IfThenSchema(JsonObject If, SchemaId Then)
     public SchemaId Then = Then;
 }
 
-public record StringSchema(string? PropertyName, SchemaId? Parent, JsonString? Format) : ISchema
+public record StringSchema(string? PropertyName, SchemaId? Parent, JsonString? Format, JsonString? ForeignKey, JsonBoolean? UseCustomType) : ISchema
 {
-    public JsonString? Format = Format;
     public string? PropertyName { get; } = PropertyName;
     public SchemaId? Parent { get; } = Parent;
+    
+    public JsonString? Format { get; } = Format;
+    public JsonString? ForeignKey { get; } = ForeignKey;
+    public JsonBoolean? UseCustomType { get; } = UseCustomType;
 }
 
 public record NumberSchema(string? PropertyName, SchemaId? Parent) : ISchema

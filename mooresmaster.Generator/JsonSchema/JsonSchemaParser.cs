@@ -82,7 +82,9 @@ public static class JsonSchemaParser
     private static SchemaId ParseString(JsonObject json, SchemaId? parent, SchemaTable table)
     {
         var format = json["format"] as JsonString;
-        return table.Add(new StringSchema(json.PropertyName, parent, format));
+        var foreignKey = json["foreignKey"] as JsonString;
+        var useCustomType = json["useCustomType"] as JsonBoolean;
+        return table.Add(new StringSchema(json.PropertyName, parent, format, foreignKey, useCustomType));
     }
 
     private static SchemaId ParseNumber(JsonObject json, SchemaId? parent, SchemaTable table)
