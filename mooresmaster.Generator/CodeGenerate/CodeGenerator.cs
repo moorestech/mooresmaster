@@ -107,6 +107,7 @@ public static class CodeGenerator
             Vector2IntType => "global::UnityEngine.Vector2Int",
             Vector3IntType => "global::UnityEngine.Vector3Int",
             UUIDType => "global::System.Guid",
+            StringCustomType => "string", // TODO 何らかの方法で取得する
             CustomType customType => $"{customType.Name.GetModelName()}",
             _ => throw new ArgumentOutOfRangeException(type.GetType().Name)
         };
