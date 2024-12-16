@@ -1,0 +1,5 @@
+id: arrayRefTest
+type: object
+properties:
+  - key: data
+    ref: arrayRef

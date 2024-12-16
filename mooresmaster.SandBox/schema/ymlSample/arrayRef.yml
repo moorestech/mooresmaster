@@ -1,0 +1,7 @@
+id: arrayRef
+type: array
+items:
+  type: object
+  properties:
+    - key: data
+      type: number

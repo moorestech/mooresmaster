@@ -38,6 +38,10 @@
         <AdditionalFiles Include="Schema\ymlSample\machineRecipes.yml"/>
         <None Remove="Schema\ymlSample\mapObjects.yml"/>
         <AdditionalFiles Include="Schema\ymlSample\mapObjects.yml"/>
+        <None Remove="Schema\ymlSample\arrayRef.yml" />
+        <AdditionalFiles Include="Schema\ymlSample\arrayRef.yml" />
+        <None Remove="Schema\ymlSample\arrayRefTest.yml" />
+        <AdditionalFiles Include="Schema\ymlSample\arrayRefTest.yml" />
     </ItemGroup>
 
     <ItemGroup>
